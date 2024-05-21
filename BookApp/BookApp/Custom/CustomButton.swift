@@ -42,3 +42,12 @@ class CustomButton: UIButton {
     }
 
 }
+//extension CustomButton {
+//    var isValid: Bool {
+//        get { isEnabled && backgroundColor == .valid }
+//        set {
+//            backgroundColor = newValue ? .valid : .nonValid
+//            isEnabled = newValue
+//        }
+//    }
+//}

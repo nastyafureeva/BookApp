@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class CustomTextField: UITextField {
 
@@ -50,4 +51,14 @@ class CustomTextField: UITextField {
         fatalError("init(coder:) has not been implemented")
     }
 
+}
+
+extension CustomTextField {
+    var textPublisher: AnyPublisher<String, Never> {
+        NotificationCenter.default
+            .publisher(for: CustomTextField.textDidChangeNotification, object: self)
+            .compactMap { $0.object as? CustomTextField } // receiving notifications with objects which are instances of UITextFields
+            .compactMap(\.text) // extracting text and removing optional values (even though the text cannot be nil)
+            .eraseToAnyPublisher()
+    }
 }

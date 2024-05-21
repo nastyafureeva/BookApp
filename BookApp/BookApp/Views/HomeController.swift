@@ -22,7 +22,7 @@ class HomeController: UIViewController {
         super.viewDidLoad()
         self.setupUI()
 
-        self.label.text = "CodeBrah\ncodebrah@gmail.com"
+        self.label.text = ""
     }
 
     private func setupUI() {

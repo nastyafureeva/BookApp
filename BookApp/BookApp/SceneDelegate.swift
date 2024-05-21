@@ -25,11 +25,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     public func checkAuthentication() {
-        if Auth.auth().currentUser == nil {
-            self.goToController(with: LoginController())
-        } else {
-            self.goToController(with: HomeController())
-        }
+        self.goToController(with: LoginViewController())
+      //  if Auth.auth().currentUser == nil {
+     //       self.goToController(with: LoginController())
+     //   } else {
+          //  self.goToController(with: HomeController())
+      //  }
     }
     private func goToController(with viewController: UIViewController) {
         DispatchQueue.main.async { [weak self] in

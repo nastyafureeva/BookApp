@@ -17,6 +17,7 @@ class RegisterController: UIViewController {
 
     private let signUpButton = CustomButton(title: "Sign Up", hasBackground: true, fontSize: .big)
     private let signInButton = CustomButton(title: "Already have account? Sign in", fontSize: .med)
+    
     private let termsTextView: UITextView = {
         let tv = UITextView()
         tv.text = "By creating an account, you agree our Terms & Condition you acknowledge"
