@@ -53,45 +53,46 @@ class LoginViewController: UIViewController {
         }
 
         func bindViewModelToView() {
-            viewModel.showAlertSubject
-                .sink { [weak self] in
-                    self?.showAlert()
-                }
-                .store(in: &bindings)
             print("VALID")
-            
-            
+
+
             viewModel.$validationError
                 .sink { [weak self] error in
                     if let error = error {
                         self?.showAlert(error: error)
-                    } else {
-                        self?.navigateToList()
                     }
                 }
                 .store(in: &bindings)
+
+            viewModel.$isSuccess
+                .sink { [weak self] isSuccess in
+                    if isSuccess == true {
+                        self?.navigateToList()
+                    }
+                }.store(in: &bindings)
+
         }
 
-
-//            viewModel.validationResult
-//                .sink { [weak self] completion in
-//                    switch completion {
-//                    case let .failure(error):
-//                        print("HERE+ \(error)")
-//                        self?.showAlert(error: error)
-//                    case .finished:
-//                        break
-//                    }
-//                } receiveValue: { [weak self] _ in
-//                    self?.navigateToList()
-//                }
-//                .store(in: &bindings)
-//        }
+        //            viewModel.validationResult
+        //                .sink { [weak self] completion in
+        //                    switch completion {
+        //                    case let .failure(error):
+        //                        print("HERE+ \(error)")
+        //                        self?.showAlert(error: error)
+        //                    case .finished:
+        //                        break
+        //                    }
+        //                } receiveValue: { [weak self] _ in
+        //                    self?.navigateToList()
+        //                }
+        //                .store(in: &bindings)
+        //        }
         bindViewToViewModel()
         bindViewModelToView()
     }
 
     @objc private func onClick() {
+        print("onClick")
         viewModel.validateCredentials()
     }
     @objc private func didTapNewUser() {
@@ -101,16 +102,49 @@ class LoginViewController: UIViewController {
     }
 
     private func navigateToList() {
-        let listViewController = HomeController()
-        navigationController?.pushViewController(listViewController, animated: true)
-    }
-    func showAlert() {
-        let alertController = UIAlertController(title: "Alert", message: "Привет, это alert из модели!", preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        //        let listViewController = ConversationViewController()
+        //        navigationController?.pushViewController(listViewController, animated: true)
+        let tabBarController = createTabBarController()
 
-        if let viewController = UIApplication.shared.keyWindow?.rootViewController {
-            viewController.present(alertController, animated: true, completion: nil)
-        }
+        //        let vc = RegisterViewController()
+        //  UIApplication.shared.windows.first?.rootViewController = tabBarController
+        //   self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.pushViewController(tabBarController, animated: true)
+        print("DEBUG PRINT:", "navigateToList")
+
+    }
+
+    func createTabBarController() -> UITabBarController {
+        let tabBarController = UITabBarController()
+
+        //  UITabBar.appearance().backgroundColor = .systemBlue
+        tabBarController.viewControllers = [createFeedViewController(), createProfileViewController(), createBooksViewController()]
+        return tabBarController
+
+    }
+
+    func createBooksViewController() -> UINavigationController {
+        let booksViewController = BooksViewController()
+        booksViewController.title = "Книги"
+        booksViewController.tabBarItem = UITabBarItem(title: "Книги", image: UIImage(systemName: "books.vertical"), tag: 1)
+        return UINavigationController(rootViewController: booksViewController)
+    }
+    func createFeedViewController() -> UINavigationController {
+        let feedViewController = ConversationsViewController()
+        feedViewController.title = "Лента"
+        feedViewController.tabBarItem = UITabBarItem(title: "Лента", image: UIImage(systemName: "doc.richtext"), tag: 0)
+        return UINavigationController(rootViewController: feedViewController)
+    }
+    func createProfileViewController() -> UINavigationController {
+
+        let profileViewController = ProfileViewController()
+
+        profileViewController.title = "Профиль"
+
+        profileViewController.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.circle"), tag: 1)
+
+        return UINavigationController(rootViewController: profileViewController)
+
     }
     func showAlert(error: Error) {
         DispatchQueue.main.async {

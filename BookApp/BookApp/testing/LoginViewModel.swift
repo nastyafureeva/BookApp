@@ -11,8 +11,9 @@ import Combine
 final class LoginViewModel {
     @Published var email: String = ""
     @Published var password: String = ""
-    @Published var isLoading = false
-    @Published var validationError: Error?
+    @Published var validationError: Error? = nil
+        @Published var isSuccess: Bool = false
+
 
 
     let validationResult = PassthroughSubject<Void, Error>()
@@ -20,23 +21,58 @@ final class LoginViewModel {
 
     func showAlert() {
         showAlertSubject.send()    }
+//    func validateInput() -> Bool {
+//            if email.isEmpty {
+//                errorMessage = "Введите email"
+//                isSuccess = false
+//                return false
+//            } else if password.isEmpty {
+//                errorMessage = "Введите пароль"
+//                isSuccess = false
+//                return false
+//            }
+//
+//            errorMessage = nil
+//            isSuccess = true
+//            return true
+//        }
+//
+//        func authorize() {
+//            guard validateInput() else { return }
+//
+//            // Выполните авторизацию здесь (например, с помощью Combine)
+//
+//            // При успешной авторизации
+//            isSuccess = true
+//            errorMessage = "Авторизация прошла успешно"
+//
+//            // При неудачной авторизации
+//            isSuccess = false
+//            errorMessage = "Не удалось авторизоваться"
+//        }
+//    }
 
 
-    //    private let credentialsValidator: CredentialsValidatorProtocol
-    //
-    //    init(credentialsValidator: CredentialsValidatorProtocol = CredentialsValidator()) {
-    //        self.credentialsValidator = credentialsValidator
-    //    }
     func validateCredentials() {
         if !Validator.isValidEmail(for: email) {
             let error = NSError(domain: "com.example", code: 500, userInfo: [NSLocalizedDescriptionKey: "Ошибка логина"])
             print("inModelemail\(error)" )
-            validationError = error  }
+            validationError = error 
+            isSuccess = false}
         else if !Validator.isPasswordValid(for: password) {
                 let error = NSError(domain: "com.example", code: 500, userInfo: [NSLocalizedDescriptionKey: "Ошибка пароля"])
             validationError = error
-            } else {
-                validationError = nil
+            isSuccess = false
+            }
+                var loginRequest = LoginUserRequest(email: email, password: password)
+        print(loginRequest)
+                AuthService.shared.signIn(with: loginRequest) { [weak self] error in
+                            guard let self = self else { return }
+                            if let error = error {
+                                validationError = error
+                                isSuccess = false
+                            }
+                    isSuccess = true
             }
         }
 

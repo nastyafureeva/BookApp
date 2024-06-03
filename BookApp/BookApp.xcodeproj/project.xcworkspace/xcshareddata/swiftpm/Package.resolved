@@ -1,5 +1,5 @@
 {
-  "originHash" : "c63c63846d9c539229e96de38d6af51417e28c0ee9a0bc48bd0f0f19d923c329",
+  "originHash" : "eb10149e3bf18aed494d96a1c93a37d836347a724efefa506a47fa0b9abeed38",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -74,6 +74,15 @@
       }
     },
     {
+      "identity" : "inputbaraccessoryview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nathantannar4/InputBarAccessoryView",
+      "state" : {
+        "revision" : "17ced92a5dccb36512b408b6276353631d7cbe57",
+        "version" : "6.3.0"
+      }
+    },
+    {
       "identity" : "interop-ios-for-google-sdks",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/interop-ios-for-google-sdks.git",
@@ -83,12 +92,30 @@
       }
     },
     {
+      "identity" : "jgprogresshud",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JonasGessner/JGProgressHUD.git",
+      "state" : {
+        "revision" : "78d7cd35f1d90ff74fd82e486f2cbe4b24be8cf9",
+        "version" : "2.2.0"
+      }
+    },
+    {
       "identity" : "leveldb",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/leveldb.git",
       "state" : {
         "revision" : "43aaef65e0c665daadf848761d560e446d350d3d",
         "version" : "1.22.4"
+      }
+    },
+    {
+      "identity" : "messagekit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MessageKit/MessageKit",
+      "state" : {
+        "revision" : "1993e8e90d4e9a61b8d9bc8ceb733964ce943376",
+        "version" : "4.2.0"
       }
     },
     {
@@ -107,6 +134,15 @@
       "state" : {
         "revision" : "540318ecedd63d883069ae7f1ed811a2df00b6ac",
         "version" : "2.4.0"
+      }
+    },
+    {
+      "identity" : "sdwebimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SDWebImage/SDWebImage.git",
+      "state" : {
+        "revision" : "b8523c1642f3c142b06dd98443ea7c48343a4dfd",
+        "version" : "5.19.3"
       }
     },
     {

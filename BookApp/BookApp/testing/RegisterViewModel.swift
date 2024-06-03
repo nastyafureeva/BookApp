@@ -6,11 +6,12 @@
 //
 
 import Foundation
+import UIKit
 final class RegisterViewModel {
     @Published var username: String = ""
     @Published var email: String = ""
     @Published var password: String = ""
-
+    @Published var image: UIImage?
 
     @Published var validationError: Error?
 
@@ -21,17 +22,17 @@ final class RegisterViewModel {
 
         if !Validator.isValidUsername(for: username){
             let error = NSError(domain: "com.example", code: 500, userInfo: [NSLocalizedDescriptionKey: "Некорректное имя"])
-            print("inModelemail\(error)" )
+            print("inModelVALIDUsername\(error)" )
             validationError = error
             return
         } else if !Validator.isValidEmail(for: email){
             let error = NSError(domain: "com.example", code: 500, userInfo: [NSLocalizedDescriptionKey: "Ошибка логина"])
-            print("inModelemail\(error)" )
+            print("inModelVALIDEmail\(error)" )
             validationError = error
             return
         } else if !Validator.isPasswordValid(for: password){
             let error = NSError(domain: "com.example", code: 500, userInfo: [NSLocalizedDescriptionKey: "Ошибка пароля"])
-            print("inModelemail\(error)" )
+            print("inModelVALIDPassword\(error)" )
             validationError = error
             return
         }
@@ -44,15 +45,30 @@ final class RegisterViewModel {
 
             if let error = error {
                 let error = NSError(domain: "com.example", code: 500, userInfo: [NSLocalizedDescriptionKey: "Неизвестная ошибка"])
-                print("inModelemail\(error)" )
+                print("REGISTER\(error)" )
                 validationError = error
             }
 
             if wasRegistered {
+                print("WAS REGISTERED")
                 validationError = nil
+                guard let pic = image,
+                      let data = pic.pngData() else{
+                    return
+                }
+                let fileName = registerUserRequest.profilePicFileName
+                StorageManager.shared.uploadProfilePicture(with: data, fileName: fileName, completion: { result in
+                    switch result {
+                    case .success(let downloadURL):
+                        UserDefaults.standard.set(downloadURL, forKey: "profile_pic_URL")
+                        print(downloadURL)
+                    case .failure(let error):
+                        print("Storage error: \(error)")
+                    }
+                })
             } else {
                 let error = NSError(domain: "com.example", code: 500, userInfo: [NSLocalizedDescriptionKey: "Неизвестная ошибка"])
-                print("inModelemail\(error)" )
+                print("Was reg, but \(error)" )
                 validationError = error
             }
         }

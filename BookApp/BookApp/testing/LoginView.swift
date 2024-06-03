@@ -9,7 +9,7 @@ import UIKit
 
 class LoginView: UIView {
     // MARK: - UI Components
-    private let headerView = AuthHeaderView(title: "Sign In", subTitle: "Sign in to your account")
+    private let headerView = AuthHeaderView(image: "logoImage", title: "Sign In", subTitle: "Sign in to your account")
 
      let emailField = CustomTextField(fieldType: .email )
      let passwordField = CustomTextField(fieldType: .password)
@@ -51,7 +51,7 @@ class LoginView: UIView {
             headerView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
             headerView.leadingAnchor.constraint(equalTo:leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            headerView.heightAnchor.constraint(equalToConstant: 222),
+            headerView.heightAnchor.constraint(equalToConstant: 350),
 
             emailField.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 12),
             emailField.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),

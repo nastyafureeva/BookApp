@@ -11,8 +11,16 @@ import FirebaseFirestore
 
 class AuthService {
 
+    private let db = Firestore.firestore()
+
     public static let shared = AuthService()
     private init() {}
+
+    static func safeEmail(emailAddress: String) -> String {
+        var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
+        safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
+        return safeEmail
+    }
 
     public func registerUser(with userRequest: RegisterUserRequest, completion: @escaping(Bool, Error?) -> Void) {
         let username = userRequest.username
@@ -30,9 +38,7 @@ class AuthService {
                 return
             }
 
-            let db = Firestore.firestore()
-            db.collection("users")
-                .document(resultUser.uid)
+            self.db.collection("users").document(resultUser.uid)
                 .setData([
                     "username": username,
                     "email": email
@@ -51,6 +57,7 @@ class AuthService {
             if let error = error {
                 completion(error)
                 return } else{
+                    UserDefaults.standard.set(userRequest.email, forKey: "email")
                     completion(nil)
                 }
         }
@@ -64,6 +71,313 @@ class AuthService {
             completion(error)
         }
     }
+
+    public func getAllUsers(completion: @escaping (Result<[[String: String]], Error>) -> Void) {
+        db.collection("users").getDocuments { (snapshot, error) in
+            guard error == nil, let snapshot = snapshot else {
+                completion(.failure(NSError(domain: "com.example", code: 500, userInfo: [NSLocalizedDescriptionKey: "failedToFetch"])))
+                return
+            }
+
+            var values: [[String: String]] = []
+            for document in snapshot.documents {
+                if let data = document.data() as? [String: String] {
+                    values.append(data)
+                }
+
+                //                values.append(document.data() as? [String: String] ?? [:])
+            }
+
+            completion(.success(values))
+        }
+
+    }
+    public enum FirestoreError{
+        case failedToFetch
+    }
+
 }
 
+extension AuthService {
+    public func createNewConversation(with otherUserEmail: String, name: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
+        guard let currentEmail = UserDefaults.standard.value(forKey: "email") as? String
+                // let currentNamme = UserDefaults.standard.value(forKey: "name") as? String
+        else {
+            return
+        }
+        // let safeEmail = AuthService.safeEmail(emailAddress: currentEmail)
 
+        //        let ref = db.collection("\(safeEmail)")
+        //
+        //        ref.observeSingleEvent(of: .value, with: { [weak self] snapshot in
+        //            guard var userNode = snapshot.value as? [String: Any] else {
+        //                completion(false)
+        //                print("user not found")
+        //                return
+        //            }
+
+        let ref =  db.collection("users")
+        let user = Auth.auth().currentUser
+        if let user = user {
+            let uid = user.uid
+            print(uid)
+            ref.document(uid).getDocument { [weak self] documentSnapshot, error in
+                guard let documentSnapshot = documentSnapshot, documentSnapshot.exists else {
+                    completion(false)
+                    print(currentEmail)
+                    print("user not found")
+                    return
+                }
+                print("getDocument true")
+                guard var userNode = documentSnapshot.data() else {
+                    completion(false)
+                    print("user data not found")
+                    return
+                }
+
+
+                let messageDate = firstMessage.sentDate
+                let dateString = ChatViewController.dateFormatter.string(from: messageDate)
+
+                var message = ""
+
+                switch firstMessage.kind {
+                case .text(let messageText):
+                    message = messageText
+                case .attributedText(_):
+                    break
+                case .photo(_):
+                    break
+                case .video(_):
+                    break
+                case .location(_):
+                    break
+                case .emoji(_):
+                    break
+                case .audio(_):
+                    break
+                case .contact(_):
+                    break
+                case .custom(_), .linkPreview(_):
+                    break
+                }
+
+
+                let conversationId = "conversation_\(firstMessage.messageId)"
+
+                let newConversationData: [String: Any] = [
+                    "id": conversationId,
+                    "other_user_email": otherUserEmail,
+                    "username": name,
+                    "latest_message": [
+                        "date": dateString,
+                        "message": message,
+                        "is_read": false
+                    ]
+                ]
+                if var conversations = userNode["conversations"] as? [[String: Any]] {
+
+                    conversations.append(newConversationData)
+                    userNode["conversations"] = conversations
+                    print(currentEmail)
+                    let user = Auth.auth().currentUser
+                    print(user)
+
+                    print(uid)
+                    ref.document(uid).updateData(userNode) { [weak self] error in
+                        guard error == nil else {
+                            print("updateData false \(error)")
+                            completion(false)
+                            return
+                        }
+                        print("updateData true")
+                        self?.finishCreatingConversation(conversationID: conversationId, name: name, firstMessage: firstMessage, completion: completion)
+                    }
+
+                }
+                else {
+                    userNode["conversations"] = [
+                        newConversationData
+                    ]
+                    ref.document(uid).updateData(userNode) { [weak self] error in
+                        guard error == nil else {
+                            print("updateData false \(error)")
+                            completion(false)
+                            return
+                        }
+                        print("updateData true")
+                        self?.finishCreatingConversation(conversationID: conversationId, name: name, firstMessage: firstMessage, completion: completion)
+                    }
+
+                }
+            }
+        }
+    }
+    private func finishCreatingConversation(conversationID: String, name: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
+        //        {
+        //            "id": String,
+        //            "type": text, photo, video,
+        //            "content": String,
+        //            "date": Date(),
+        //            "sender_email": String,
+        //            "isRead": true/false,
+        //        }
+        //
+        //         let messageDate = firstMessage.sentDate
+        //         let dateString = ChatViewController.dateFormatter.string(from: messageDate)
+        //
+        //         var message = ""
+        //         switch firstMessage.kind {
+        //         case .text(let messageText):
+        //             message = messageText
+        //         case .attributedText(_), .photo(_), .video(_), .location(_), .emoji(_), .audio(_), .contact(_),.custom(_), .linkPreview(_):
+        //             break
+        //         }
+        //
+        //         guard let myEmmail = UserDefaults.standard.value(forKey: "email") as? String else {
+        //             completion(false)
+        //             return
+        //         }
+        //
+        //         let currentUserEmail = DatabaseManager.safeEmail(emailAddress: myEmmail)
+        //
+        guard let currentEmail = UserDefaults.standard.value(forKey: "email") as? String else { completion(false)
+            return
+        }
+
+        let messageDate = firstMessage.sentDate
+        let dateString = ChatViewController.dateFormatter.string(from: messageDate)
+
+        var message = ""
+
+        switch firstMessage.kind {
+        case .text(let messageText):
+            message = messageText
+        case .attributedText(_):
+            break
+        case .photo(_):
+            break
+        case .video(_):
+            break
+        case .location(_):
+            break
+        case .emoji(_):
+            break
+        case .audio(_):
+            break
+        case .contact(_):
+            break
+        case .custom(_), .linkPreview(_):
+            break
+        }
+        let collectionMessage: [String: Any] = [
+            "id": firstMessage.messageId,
+            "type": firstMessage.kind.messageKindString,
+            "content": message,
+            "date": dateString,
+            "sender_email": currentEmail,
+            "is_read": false,
+            "username": name
+        ]
+
+        let value: [String: Any] = [
+            "messages": [
+                collectionMessage
+            ]
+        ]
+        //
+        //         print("adding convo: \(conversationID)")
+        //
+        db.collection("\(conversationID)").addDocument(data: value, completion: { error in
+            guard error == nil else {
+                completion(false)
+                return
+            }
+            completion(true)
+        })
+    }
+
+    public func getAllConversations(for email: String, completion: @escaping (Result<[Conversation], Error>) -> Void) {
+        db.collection("users").whereField("email", isEqualTo: email).getDocuments { snapshot, error in
+            guard let snapshot = snapshot, error == nil else {
+                completion(.failure(NSError(domain: "com.example", code: 500, userInfo: [NSLocalizedDescriptionKey: "failedToFetch"])))
+                return
+            }
+
+            guard let document = snapshot.documents.first else {
+                completion(.failure(NSError(domain: "com.example", code: 500, userInfo: [NSLocalizedDescriptionKey: "failedToFetch"])))
+                return
+            }
+
+            guard let value = document["conversations"] as? [[String: Any]] else {
+                completion(.failure(NSError(domain: "com.example", code: 500, userInfo: [NSLocalizedDescriptionKey: "failedToFetch"])))
+                return
+            }
+
+            print("VALUE\(value)")
+            let conversations: [Conversation] = value.compactMap({ dictionary in
+                guard let conversationId = dictionary["id"] as? String,
+                      let name = dictionary["username"] as? String,
+                      let otherUserEmail = dictionary["other_user_email"] as? String,
+                      let latestMessage = dictionary["latest_message"] as? [String: Any],
+                      let date = latestMessage["date"] as? String,
+                      let message = latestMessage["message"] as? String,
+                      let isRead = latestMessage["is_read"] as? Bool else {
+
+                    return nil
+                }
+
+                let latestMmessageObject = LatestMessage(date: date,
+                                                         text: message,
+                                                         isRead: isRead)
+
+                return Conversation(id: conversationId,
+                                    name: name,
+                                    otherUserEmail: otherUserEmail,
+                                    latestMessage: latestMmessageObject)
+            })
+            print("CONVERS\(conversations)")
+            completion(.success(conversations))
+        }
+    }
+    public func getAllMessagesForConversation(with id: String, completion: @escaping (Result<[Message], Error>) -> Void) {
+//        db.collection("\(id)").document("messages").getDocument { snapshot, error in
+//            guard let snapshot = snapshot, error == nil else {
+//                completion(.failure(NSError(domain: "com.example", code: 500, userInfo: [NSLocalizedDescriptionKey: "failedToFetch"])))
+//                return
+//            }
+//            guard let value = snapshot. as? [[String: Any]] else {
+//                completion(.failure(NSError(domain: "com.example", code: 500, userInfo: [NSLocalizedDescriptionKey: "failedToFetch"])))
+//                return
+//            }
+//
+//            print("VALUE\(value)")
+//            let messages: [Message] = value.compactMap({ dictionary in
+//                guard let username = dictionary["username"] as? String,
+//                      let isRead = dictionary["is_read"] as? Bool,
+//                      let messageID = dictionary["id"] as? String,
+//                      let content = dictionary["content"] as? String,
+//                      let senderEmail = dictionary["sender_email"] as? String,
+//                      let type = dictionary["type"] as? String,
+//                      let dateString = dictionary["date"] as? String,
+//                      let date = ChatViewController.dateFormatter.date(from: dateString)else {
+//                    return nil
+//                }
+//                let sender = Sender(photoURL: "",
+//                                    senderId: senderEmail,
+//                                    displayName: username)
+//
+//                return Message(sender: sender,
+//                               messageId: messageID,
+//                               sentDate: date,
+//                               kind: .text(content))
+//            })
+//            print("CONVERS\(messages)")
+//            completion(.success(messages))
+//        }
+    }
+    //    public func sendMessage(to conversation: String, otherUserEmail: String, name: String, newMessage: Message, completion: @escaping (Bool) -> Void) {
+    //    }
+    public func sendMessage(to conversation: String,  mmessage: Message, completion: @escaping (Bool) -> Void) {
+    }
+}

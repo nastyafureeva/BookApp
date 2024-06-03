@@ -16,7 +16,7 @@ import UIKit
 
 class RegisterView: UIView {
     // MARK: - UI Components
-    let headerView = AuthHeaderView(title: "Sign Up", subTitle: "Create your account")
+    let headerView = AuthHeaderView(image: "logoRegister", title: "Sign Up", subTitle: "Create your account")
 
     let usernameField = CustomTextField(fieldType: .username)
     let emailField = CustomTextField(fieldType: .email)
