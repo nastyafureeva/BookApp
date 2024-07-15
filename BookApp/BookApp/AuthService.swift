@@ -101,21 +101,9 @@ class AuthService {
 extension AuthService {
     public func createNewConversation(with otherUserEmail: String, name: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
         guard let currentEmail = UserDefaults.standard.value(forKey: "email") as? String
-                // let currentNamme = UserDefaults.standard.value(forKey: "name") as? String
         else {
             return
         }
-        // let safeEmail = AuthService.safeEmail(emailAddress: currentEmail)
-
-        //        let ref = db.collection("\(safeEmail)")
-        //
-        //        ref.observeSingleEvent(of: .value, with: { [weak self] snapshot in
-        //            guard var userNode = snapshot.value as? [String: Any] else {
-        //                completion(false)
-        //                print("user not found")
-        //                return
-        //            }
-
         let ref =  db.collection("users")
         let user = Auth.auth().currentUser
         if let user = user {
@@ -214,33 +202,6 @@ extension AuthService {
         }
     }
     private func finishCreatingConversation(conversationID: String, name: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
-        //        {
-        //            "id": String,
-        //            "type": text, photo, video,
-        //            "content": String,
-        //            "date": Date(),
-        //            "sender_email": String,
-        //            "isRead": true/false,
-        //        }
-        //
-        //         let messageDate = firstMessage.sentDate
-        //         let dateString = ChatViewController.dateFormatter.string(from: messageDate)
-        //
-        //         var message = ""
-        //         switch firstMessage.kind {
-        //         case .text(let messageText):
-        //             message = messageText
-        //         case .attributedText(_), .photo(_), .video(_), .location(_), .emoji(_), .audio(_), .contact(_),.custom(_), .linkPreview(_):
-        //             break
-        //         }
-        //
-        //         guard let myEmmail = UserDefaults.standard.value(forKey: "email") as? String else {
-        //             completion(false)
-        //             return
-        //         }
-        //
-        //         let currentUserEmail = DatabaseManager.safeEmail(emailAddress: myEmmail)
-        //
         guard let currentEmail = UserDefaults.standard.value(forKey: "email") as? String else { completion(false)
             return
         }
@@ -341,43 +302,8 @@ extension AuthService {
         }
     }
     public func getAllMessagesForConversation(with id: String, completion: @escaping (Result<[Message], Error>) -> Void) {
-//        db.collection("\(id)").document("messages").getDocument { snapshot, error in
-//            guard let snapshot = snapshot, error == nil else {
-//                completion(.failure(NSError(domain: "com.example", code: 500, userInfo: [NSLocalizedDescriptionKey: "failedToFetch"])))
-//                return
-//            }
-//            guard let value = snapshot. as? [[String: Any]] else {
-//                completion(.failure(NSError(domain: "com.example", code: 500, userInfo: [NSLocalizedDescriptionKey: "failedToFetch"])))
-//                return
-//            }
-//
-//            print("VALUE\(value)")
-//            let messages: [Message] = value.compactMap({ dictionary in
-//                guard let username = dictionary["username"] as? String,
-//                      let isRead = dictionary["is_read"] as? Bool,
-//                      let messageID = dictionary["id"] as? String,
-//                      let content = dictionary["content"] as? String,
-//                      let senderEmail = dictionary["sender_email"] as? String,
-//                      let type = dictionary["type"] as? String,
-//                      let dateString = dictionary["date"] as? String,
-//                      let date = ChatViewController.dateFormatter.date(from: dateString)else {
-//                    return nil
-//                }
-//                let sender = Sender(photoURL: "",
-//                                    senderId: senderEmail,
-//                                    displayName: username)
-//
-//                return Message(sender: sender,
-//                               messageId: messageID,
-//                               sentDate: date,
-//                               kind: .text(content))
-//            })
-//            print("CONVERS\(messages)")
-//            completion(.success(messages))
-//        }
     }
-    //    public func sendMessage(to conversation: String, otherUserEmail: String, name: String, newMessage: Message, completion: @escaping (Bool) -> Void) {
-    //    }
+
     public func sendMessage(to conversation: String,  mmessage: Message, completion: @escaping (Bool) -> Void) {
     }
 }

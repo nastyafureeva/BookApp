@@ -8,8 +8,6 @@
 import UIKit
 import FirebaseAuth
 
-//import FBSDKLoginKit
-//import SDWebImage
 
 final class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -23,56 +21,6 @@ final class ProfileViewController: UIViewController, UITableViewDelegate, UITabl
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
-        //        tableView.register(ProfileTableViewCell.self,
-        //                           forCellReuseIdentifier: ProfileTableViewCell.identifier)
-        //
-        //        data.append(ProfileViewModel(viewModelType: .info,
-        //                                     title: "Name: \(UserDefaults.standard.value(forKey:"name") as? String ?? "No Name")",
-        //                                     handler: nil))
-        //        data.append(ProfileViewModel(viewModelType: .info,
-        //                                     title: "Email: \(UserDefaults.standard.value(forKey:"email") as? String ?? "No Email")",
-        //                                     handler: nil))
-        //        data.append(ProfileViewModel(viewModelType: .logout, title: "Log Out", handler: { [weak self] in
-        //
-        //            guard let strongSelf = self else {
-        //                return
-        //            }
-        //
-        //            let actionSheet = UIAlertController(title: "",
-        //                                          message: "",
-        //                                          preferredStyle: .actionSheet)
-        //            actionSheet.addAction(UIAlertAction(title: "Log Out",
-        //                                          style: .destructive,
-        //                                          handler: { [weak self] _ in
-        //
-        //                                            guard let strongSelf = self else {
-        //                                                return
-        //                                            }
-        //
-        //                                            UserDefaults.standard.setValue(nil, forKey: "email")
-        //                                            UserDefaults.standard.setValue(nil, forKey: "name")
-        //
-        //
-        //                                            do {
-        //                                                try FirebaseAuth.Auth.auth().signOut()
-        //
-        //                                                let vc = LoginViewController()
-        //                                                let nav = UINavigationController(rootViewController: vc)
-        //                                                nav.modalPresentationStyle = .fullScreen
-        //                                                strongSelf.present(nav, animated: true)
-        //                                            }
-        //                                            catch {
-        //                                                print("Failed to log out")
-        //                                            }
-        //
-        //            }))
-        //
-        //            actionSheet.addAction(UIAlertAction(title: "Cancel",
-        //                                                style: .cancel,
-        //                                                handler: nil))
-        //
-        //            strongSelf.present(actionSheet, animated: true)
-        //        }))
 
         tableView.register(UITableViewCell.self,
                            forCellReuseIdentifier: "cell")
@@ -98,12 +46,7 @@ final class ProfileViewController: UIViewController, UITableViewDelegate, UITabl
         let safeEmail = AuthService.safeEmail(emailAddress: email)
         let filename = safeEmail + "_profile_pic.png"
         let path = "images/"+filename
-        //
-        //        let headerView = UIView(frame: CGRect(x: 0,
-        //                                        y: 0,
-        //                                        width: self.view.width,
-        //                                        height: 300))
-        //
+
         let headerView = UIView(frame: CGRect(x: 0,
                                               y: 0,
                                               width: controller.view.frame.width,

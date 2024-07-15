@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import SwiftUI
 
 class LoginViewController: UIViewController {
     private lazy var contentView = LoginView()
@@ -124,15 +125,37 @@ class LoginViewController: UIViewController {
     }
 
     func createBooksViewController() -> UINavigationController {
-        let booksViewController = BooksViewController()
-        booksViewController.title = "Книги"
-        booksViewController.tabBarItem = UITabBarItem(title: "Книги", image: UIImage(systemName: "books.vertical"), tag: 1)
-        return UINavigationController(rootViewController: booksViewController)
+//        let booksViewController = BooksViewController()
+//        booksViewController.title = "Книги"
+//        booksViewController.tabBarItem = UITabBarItem(title: "Книги", image: UIImage(systemName: "books.vertical"), tag: 1)
+//        return UINavigationController(rootViewController: booksViewController)
+        // Создание UIHostingController с ContentView
+        let contentView = BooksViewController()
+        let hostingController = UIHostingController(rootView: contentView)
+
+        // Настройка заголовка и таб-бара
+//        hostingController.title = "Книги"
+      //  hostingController.navigationController?.navigationBar.isHidden = true
+
+
+        hostingController.tabBarItem = UITabBarItem(title: "Книги", image: UIImage(systemName: "books.vertical"), tag: 1)
+
+        // Возвращение UINavigationController с hostingController
+        let navigationController = UINavigationController(rootViewController: hostingController)
+              let appearance = UINavigationBarAppearance()
+              appearance.configureWithOpaqueBackground()
+              appearance.backgroundColor = .systemBackground
+              navigationController.navigationBar.standardAppearance = appearance
+              navigationController.navigationBar.scrollEdgeAppearance = appearance
+
+              return navigationController
+//        return UINavigationController(rootViewController: hostingController)
+
     }
     func createFeedViewController() -> UINavigationController {
         let feedViewController = ConversationsViewController()
-        feedViewController.title = "Лента"
-        feedViewController.tabBarItem = UITabBarItem(title: "Лента", image: UIImage(systemName: "doc.richtext"), tag: 0)
+        feedViewController.title = "Клубы"
+        feedViewController.tabBarItem = UITabBarItem(title: "Клубы", image: UIImage(systemName: "person.3"), tag: 1)
         return UINavigationController(rootViewController: feedViewController)
     }
     func createProfileViewController() -> UINavigationController {

@@ -96,10 +96,10 @@ print(email)
               let email = result["email"] else {
             return
         }
-        let vc = ChatViewController(with: email, id: "nil")
+        let vc = ChatViewController(with: email, id: nil)
         vc.isNewConversation = true
         vc.title = username
-        vc.navigationItem.largeTitleDisplayMode = .never
+      //  vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
     }
     override func viewDidAppear(_ animated: Bool) {

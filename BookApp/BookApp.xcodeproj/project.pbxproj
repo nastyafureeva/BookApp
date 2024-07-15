@@ -46,6 +46,9 @@
 		28DFE7F82C0CA6E5006BD6AF /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 28DFE7F72C0CA6E5006BD6AF /* FirebaseAnalyticsSwift */; };
 		28DFE7FA2C0CA6E5006BD6AF /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 28DFE7F92C0CA6E5006BD6AF /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		28DFE7FC2C0CA6E5006BD6AF /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 28DFE7FB2C0CA6E5006BD6AF /* FirebaseAppCheck */; };
+		28EEA8BD2C3EB76600A1CD0B /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 28EEA8BC2C3EB76600A1CD0B /* SwiftyJSON */; };
+		28EEA8C02C3EB7F400A1CD0B /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 28EEA8BF2C3EB7F400A1CD0B /* SDWebImageSwiftUI */; };
+		28EEA8C32C3EEC8D00A1CD0B /* EpubReaderLight in Frameworks */ = {isa = PBXBuildFile; productRef = 28EEA8C22C3EEC8D00A1CD0B /* EpubReaderLight */; };
 		28FFB18A2BBDF350008C8431 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FFB1892BBDF350008C8431 /* AppDelegate.swift */; };
 		28FFB18C2BBDF350008C8431 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FFB18B2BBDF350008C8431 /* SceneDelegate.swift */; };
 		28FFB18E2BBDF350008C8431 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FFB18D2BBDF350008C8431 /* LoginViewController.swift */; };
@@ -94,14 +97,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28EEA8C02C3EB7F400A1CD0B /* SDWebImageSwiftUI in Frameworks */,
 				28DFE7F82C0CA6E5006BD6AF /* FirebaseAnalyticsSwift in Frameworks */,
 				28DFE7FA2C0CA6E5006BD6AF /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				2854B0892C0D3A6100A406ED /* SDWebImageMapKit in Frameworks */,
 				28DFE7F42C0CA6E5006BD6AF /* FirebaseAnalytics in Frameworks */,
 				286288B22BC055CB008EC561 /* FirebaseDatabase in Frameworks */,
+				28EEA8C32C3EEC8D00A1CD0B /* EpubReaderLight in Frameworks */,
 				286288B62BC055CB008EC561 /* FirebaseStorage in Frameworks */,
 				28D5462A2C037D430066539E /* JGProgressHUD in Frameworks */,
 				2854B0872C0D3A6100A406ED /* SDWebImage in Frameworks */,
+				28EEA8BD2C3EB76600A1CD0B /* SwiftyJSON in Frameworks */,
 				286288B02BC055CB008EC561 /* FirebaseAuth in Frameworks */,
 				286288B42BC055CB008EC561 /* FirebaseFirestore in Frameworks */,
 				28D546222C0370900066539E /* MessageKit in Frameworks */,
@@ -239,6 +245,9 @@
 				28DFE7FB2C0CA6E5006BD6AF /* FirebaseAppCheck */,
 				2854B0862C0D3A6100A406ED /* SDWebImage */,
 				2854B0882C0D3A6100A406ED /* SDWebImageMapKit */,
+				28EEA8BC2C3EB76600A1CD0B /* SwiftyJSON */,
+				28EEA8BF2C3EB7F400A1CD0B /* SDWebImageSwiftUI */,
+				28EEA8C22C3EEC8D00A1CD0B /* EpubReaderLight */,
 			);
 			productName = BookApp;
 			productReference = 28FFB1862BBDF350008C8431 /* BookApp.app */;
@@ -273,6 +282,9 @@
 				28D546202C0370900066539E /* XCRemoteSwiftPackageReference "MessageKit" */,
 				28D546282C037D430066539E /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 				2854B0852C0D3A6100A406ED /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				28EEA8BB2C3EB76500A1CD0B /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				28EEA8BE2C3EB7F300A1CD0B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				28EEA8C12C3EEC8D00A1CD0B /* XCRemoteSwiftPackageReference "epub-reader-light" */,
 			);
 			productRefGroup = 28FFB1872BBDF350008C8431 /* Products */;
 			projectDirPath = "";
@@ -597,6 +609,30 @@
 				minimumVersion = 2.2.0;
 			};
 		};
+		28EEA8BB2C3EB76500A1CD0B /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
+		28EEA8BE2C3EB7F300A1CD0B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.1;
+			};
+		};
+		28EEA8C12C3EEC8D00A1CD0B /* XCRemoteSwiftPackageReference "epub-reader-light" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pichukov/epub-reader-light.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -664,6 +700,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 286288AE2BC055CB008EC561 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAppCheck;
+		};
+		28EEA8BC2C3EB76600A1CD0B /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28EEA8BB2C3EB76500A1CD0B /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		28EEA8BF2C3EB7F400A1CD0B /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28EEA8BE2C3EB7F300A1CD0B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+		28EEA8C22C3EEC8D00A1CD0B /* EpubReaderLight */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28EEA8C12C3EEC8D00A1CD0B /* XCRemoteSwiftPackageReference "epub-reader-light" */;
+			productName = EpubReaderLight;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
